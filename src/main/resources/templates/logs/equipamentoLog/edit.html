@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/edit}" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <title th:text="#{equipamentoLog.edit.headline}"/>
+</head>
+<div class="row mb-2" layout:fragment="breadcrumb">
+    <ol class="breadcrumb float-sm-left">
+        <li class="breadcrumb-item"><a href="/index">Home</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/logs}" th:text="#{logs.title}"></a></li>
+        <li class="breadcrumb-item"><a th:href="@{/equipamentoLogs}" th:text="#{equipamentoLog.list.headline}"></a></li>
+        <li class="breadcrumb-item"><a th:href="@{/equipamentoLogs/list/{id}(id=${equipamento.id})}"
+                                       th:text="'Tag: ' + ${equipamento.tag}"></a></li>
+        <li class="breadcrumb-item active" th:text="#{equipamentoLog.edit.headline}"></li>
+    </ol>
+</div>
+<span layout:fragment="editHeadline">
+    <h1 th:text="#{equipamentoLog.edit.headline}" class="flex-grow-1"/>
+</span>
+<span layout:fragment="editBack">
+    <a th:href="@{/equipamentoLogs/list/{id}(id=${equipamento.id})}" th:text="#{edit.back}" class="btn btn-secondary float-right"/>
+</span>
+<div layout:fragment="editGlobalErrors">
+    <div th:replace="~{fragments/forms::globalErrors('equipamentoLog')}"/>
+</div>
+<div layout:fragment="editContent">
+    <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='atividade', type='select', required='required')}"></div>
+    <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='descricao', type='textarea', required='required')}"></div>
+    <div th:replace="~{fragments/forms::inputRow(object='equipamentoLog', field='obs', maxlength='255')}"></div>
+</div>
+</html>

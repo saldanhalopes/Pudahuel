@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}" xmlns="http://www.w3.org/1999/xhtml">
+<body>
+<div layout:fragment="content">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div layout:fragment="breadcrumb"></div>
+        </div>
+    </section>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title d-flex">
+                <i class="bx bx-check font-medium-5 pl-25 pr-75"></i>
+                <span layout:fragment="listHeadline"></span>
+            </h5>
+            <div class="card-tools mt-2">
+                <ul class="nav nav-pills ml-auto">
+                    <li class="nav-item">
+                        <span layout:fragment="createNew"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div layout:fragment="search"></div>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div id="card_Top_Table" class="card-title"></div>
+                <div class="card-tools mt-2">
+                    <div id="filtro_pesquisa"></div>
+                </div>
+            </div>
+            <div class="card-body table-responsive ">
+                <div th:if="${MSG_ERROR != null}" th:text="${MSG_ERROR}" id="errorAlert"
+                     class="alert alert-danger alert-dismissible fade show" role="alert"></div>
+                <div th:if="${MSG_INFO != null}" th:text="${MSG_INFO}" id="infoAlert"
+                     class="alert alert-info alert-dismissible fade show" role="alert"></div>
+                <div th:if="${MSG_SUCCESS != null}" th:text="${MSG_SUCCESS}" id="succesAlert"
+                     class="alert alert-success alert-dismissible fade show" role="alert"></div>
+                <div layout:fragment="listErrors"></div>
+                <table class="table table-bordered table-striped table-hover" id="tableList">
+                    <thead>
+                    <tr>
+                        <th th:text="#{id.label}" scope="col"/>
+                        <th th:text="#{audit.version}" scope="col"/>
+                        <span layout:fragment="listHeader"></span>
+                        <th><!-- --></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <span layout:fragment="listContent"></span>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <span layout:fragment="listSubtotal"></span>
+                </div>
+                <div th:replace="~{fragments/utils::pagination()}"></div>
+                <div class="card-footer">
+                    <span layout:fragment="listAudit"></span>
+                    <span layout:fragment="listBackMenu"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<span layout:fragment="script">
+    <!-- DataTables  & Plugins -->
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('#tableList').DataTable({
+                "dom": '<"data_filter"f>rt<"bottom"B><"clear">',
+                "paging": false,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": false,
+                "info": false,
+                "responsive": false,
+                "autoWidth": true,
+                "language": {
+                    search: "",
+                    lengthMenu: "Exibir por página _MENU_",
+                    zeroRecords: "Nada encontrado - desculpe",
+                    info: "Mostrando a página _PAGE_ de _PAGES_",
+                    infoEmpty: "Não há registros disponíveis",
+                    infoFiltered: "(filtrado do total de _MAX_ registros)"
+                },
+                "buttons": [
+                    {
+                        extend: 'copy',
+                        exportOptions: {columns: ':visible:not(:eq(-1))'}
+                    }, {
+                        extend: 'csv',
+                        exportOptions: {columns: ':visible:not(:eq(-1))'}
+                    }, {
+                        extend: 'excel',
+                        exportOptions: {columns: ':visible:not(:eq(-1))'}
+                    }, {
+                        extend: 'pdf',
+                        exportOptions: {columns: ':visible:not(:eq(-1))'}
+                    }, {
+                        extend: 'print',
+                        exportOptions: {columns: ':visible:not(:eq(-1))'}
+                    }]
+            }).buttons().container().appendTo('#card_Top_Table');
+            $('.data_filter').appendTo('#filtro_pesquisa');
+            $('.dataTables_filter label').addClass('input-group');
+            $('.dataTables_filter label').append('<span class="input-group-text"><i class="fas fa-search"></i></span>');
+        });
+
+        window.setTimeout(function () {
+            $('#infoAlert').fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+            $('#errorAlert').fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+            $('#succesAlert').fadeTo(500, 0).slideUp(500, function () {
+                $(this).remove();
+            });
+        }, 4000);
+        $(function () {
+            $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({
+                    alwaysShowClose: true
+                });
+            });
+            //Initialize Select2 Elements
+            $('.select2').select2()
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+        })
+    </script>
+</span>
+</html>
+
+
+
